@@ -11,7 +11,7 @@ export async function getVerseAnalysis(book: string, chapter: number, verse: num
   Capítulo: ${chapter}
   Versículo: ${verse}
 
-  El análisis de cada palabra debe incluir: raíz (shoresh), forma léxica, categoría gramatical, morfología detallada (tiempo, modo, aspecto para verbos; género, número, estado para sustantivos), función sintáctica, transliteración y pronunciación.
+  El análisis de cada palabra debe incluir: significado (traducción literal al español), raíz (shoresh), forma léxica, categoría gramatical, morfología detallada (tiempo, modo, aspecto para verbos; género, número, estado para sustantivos), función sintáctica, transliteración y pronunciación.
   
   También proporciona una traducción sugerida al español y una breve explicación de las decisiones de traducción.`;
 
@@ -31,6 +31,7 @@ export async function getVerseAnalysis(book: string, chapter: number, verse: num
                 type: Type.OBJECT,
                 properties: {
                   word: { type: Type.STRING },
+                  meaning: { type: Type.STRING },
                   root: { type: Type.STRING },
                   lexicalForm: { type: Type.STRING },
                   category: { type: Type.STRING },
@@ -39,7 +40,7 @@ export async function getVerseAnalysis(book: string, chapter: number, verse: num
                   transliteration: { type: Type.STRING },
                   pronunciation: { type: Type.STRING },
                 },
-                required: ["word", "root", "lexicalForm", "category", "morphology", "function", "transliteration", "pronunciation"]
+                required: ["word", "meaning", "root", "lexicalForm", "category", "morphology", "function", "transliteration", "pronunciation"]
               }
             },
             aiTranslation: { type: Type.STRING },

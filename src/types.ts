@@ -1,5 +1,6 @@
 export interface WordAnalysis {
   word: string;
+  meaning: string;
   root: string;
   lexicalForm: string;
   category: string;

@@ -450,6 +450,10 @@ export default function App() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="space-y-1 col-span-2">
+                        <p className="text-slate-500 text-xs">Significado</p>
+                        <p className="font-medium text-amber-500 text-base">{selectedWord.meaning}</p>
+                      </div>
                       <div className="space-y-1">
                         <p className="text-slate-500 text-xs">Raíz (Shoresh)</p>
                         <p className="font-medium text-amber-400">{selectedWord.root}</p>
