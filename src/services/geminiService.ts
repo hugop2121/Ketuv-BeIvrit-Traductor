@@ -3,7 +3,14 @@ import { VerseData, WordAnalysis } from "../types";
 
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
+const verseCache: Record<string, VerseData> = {};
+
 export async function getVerseAnalysis(book: string, chapter: number, verse: number): Promise<VerseData> {
+  const cacheKey = `${book}-${chapter}-${verse}`;
+  if (verseCache[cacheKey]) {
+    return verseCache[cacheKey];
+  }
+
   const model = "gemini-3-flash-preview";
   const prompt = `Actúa como un experto en hebreo bíblico y lingüística semítica. 
   Proporciona el texto original, análisis morfosintáctico detallado y sugerencias de traducción para el siguiente versículo de la Torah:
@@ -60,14 +67,19 @@ export async function getVerseAnalysis(book: string, chapter: number, verse: num
     }
 
     const data = JSON.parse(response.text);
-    return {
+    const result = {
       book,
       chapter,
       verse,
       ...data
     };
-  } catch (error) {
+    verseCache[cacheKey] = result;
+    return result;
+  } catch (error: any) {
     console.error("Error in getVerseAnalysis:", error);
+    if (error.message?.includes("429") || error.message?.includes("quota") || error.message?.includes("RESOURCE_EXHAUSTED")) {
+      throw new Error("Has alcanzado el límite de consultas gratuitas. Por favor, espera un minuto antes de intentar de nuevo.");
+    }
     throw error;
   }
 }
