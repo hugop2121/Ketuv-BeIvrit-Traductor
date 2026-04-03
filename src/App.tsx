@@ -70,6 +70,8 @@ export default function App() {
   const [savedNote, setSavedNote] = useState<VerseNote | null>(null);
   const [saving, setSaving] = useState(false);
 
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u);
@@ -104,6 +106,8 @@ export default function App() {
         setSavedTranslation(null);
         setUserTranslation('');
       }
+    }, (err) => {
+      console.error("Error listening to translations:", err);
     });
 
     // Listen for user note
@@ -125,6 +129,8 @@ export default function App() {
         setSavedNote(null);
         setUserNote('');
       }
+    }, (err) => {
+      console.error("Error listening to notes:", err);
     });
 
     return () => {
@@ -135,12 +141,14 @@ export default function App() {
 
   const fetchVerse = async () => {
     setFetchingVerse(true);
+    setError(null);
     try {
       const data = await getVerseAnalysis(currentBook.english, currentChapter, currentVerse);
       setVerseData(data);
       setSelectedWord(null);
-    } catch (error) {
-      console.error("Error fetching verse:", error);
+    } catch (err: any) {
+      console.error("Error fetching verse:", err);
+      setError("No se pudo cargar el análisis del versículo. Por favor, verifica tu conexión o la clave de API.");
     } finally {
       setFetchingVerse(false);
     }
@@ -377,6 +385,16 @@ export default function App() {
                       <Sparkles className="text-amber-500" size={32} />
                     </motion.div>
                     <p className="text-slate-400 animate-pulse">Analizando texto sagrado...</p>
+                  </div>
+                ) : error ? (
+                  <div className="text-center space-y-4">
+                    <p className="text-red-400 text-sm">{error}</p>
+                    <button 
+                      onClick={fetchVerse}
+                      className="px-4 py-2 bg-amber-600/20 text-amber-500 rounded-lg text-xs hover:bg-amber-600/30 transition-colors"
+                    >
+                      Reintentar
+                    </button>
                   </div>
                 ) : verseData ? (
                   <div className="text-right space-y-8" dir="rtl">
