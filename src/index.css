@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "SBL Hebrew", "Times New Roman", serif;
+}
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-800 rounded-full hover:bg-slate-700 transition-colors;
+}
+
+/* Typography for Biblical Hebrew */
+.hebrew-text {
+  font-family: "SBL Hebrew", "Ezra SIL", "Times New Roman", serif;
+  line-height: 1.8;
+}
+
