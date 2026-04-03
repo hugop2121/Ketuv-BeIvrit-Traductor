@@ -16,6 +16,10 @@ export async function getVerseAnalysis(book: string, chapter: number, verse: num
   También proporciona una traducción sugerida al español y una breve explicación de las decisiones de traducción.`;
 
   try {
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error("La clave de API de Gemini no está configurada. Por favor, añádela en las variables de entorno.");
+    }
+
     const response = await genAI.models.generateContent({
       model,
       contents: prompt,

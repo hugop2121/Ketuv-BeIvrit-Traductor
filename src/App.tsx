@@ -148,7 +148,7 @@ export default function App() {
       setSelectedWord(null);
     } catch (err: any) {
       console.error("Error fetching verse:", err);
-      setError("No se pudo cargar el análisis del versículo. Por favor, verifica tu conexión o la clave de API.");
+      setError(err.message || "No se pudo cargar el análisis del versículo. Por favor, verifica tu conexión o la clave de API.");
     } finally {
       setFetchingVerse(false);
     }
@@ -220,10 +220,10 @@ export default function App() {
             <img 
               src="https://raw.githubusercontent.com/priicarpalarcon/KetuvBeIvrit/main/logo.png" 
               alt="Logo" 
-              className="h-10 w-auto"
+              className="h-12 w-auto"
               onError={(e) => {
                 // Fallback if logo fails to load
-                (e.target as HTMLImageElement).src = "https://picsum.photos/seed/hebrew/100/100";
+                (e.target as HTMLImageElement).style.display = 'none';
               }}
             />
             <h1 className="text-xl font-bold bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent hidden sm:block">
