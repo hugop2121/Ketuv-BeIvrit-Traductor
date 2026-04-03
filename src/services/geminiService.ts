@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { VerseData, WordAnalysis } from "./types";
+import { VerseData, WordAnalysis } from "../types";
 
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
