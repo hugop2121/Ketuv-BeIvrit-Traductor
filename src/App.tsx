@@ -81,7 +81,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    fetchVerse();
+    const timer = setTimeout(() => {
+      fetchVerse();
+    }, 300); // 300ms delay to prevent rapid requests
+    return () => clearTimeout(timer);
   }, [currentBook, currentChapter, currentVerse]);
 
   useEffect(() => {

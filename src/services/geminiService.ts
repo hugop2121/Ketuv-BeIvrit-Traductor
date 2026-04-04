@@ -3,7 +3,30 @@ import { VerseData, WordAnalysis } from "../types";
 
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
-const verseCache: Record<string, VerseData> = {};
+// Cargar caché inicial desde localStorage
+const getInitialCache = (): Record<string, VerseData> => {
+  try {
+    const saved = localStorage.getItem('ketuv_verse_cache');
+    return saved ? JSON.parse(saved) : {};
+  } catch (e) {
+    return {};
+  }
+};
+
+const verseCache: Record<string, VerseData> = getInitialCache();
+
+const saveCache = () => {
+  try {
+    // Limitar el tamaño de la caché para no saturar localStorage (aprox 50 versículos)
+    const keys = Object.keys(verseCache);
+    if (keys.length > 50) {
+      delete verseCache[keys[0]];
+    }
+    localStorage.setItem('ketuv_verse_cache', JSON.stringify(verseCache));
+  } catch (e) {
+    console.warn("No se pudo guardar la caché en localStorage");
+  }
+};
 
 export async function getVerseAnalysis(book: string, chapter: number, verse: number): Promise<VerseData> {
   const cacheKey = `${book}-${chapter}-${verse}`;
@@ -74,6 +97,7 @@ export async function getVerseAnalysis(book: string, chapter: number, verse: num
       ...data
     };
     verseCache[cacheKey] = result;
+    saveCache();
     return result;
   } catch (error: any) {
     console.error("Error in getVerseAnalysis:", error);
